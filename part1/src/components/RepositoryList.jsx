@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     height: 10,
     paddingVertical: 10,
     paddingHorizontal: 10,
+    flex: 1,
   },
 });
 
