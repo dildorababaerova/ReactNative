@@ -1,18 +1,23 @@
 import { View, StyleSheet } from "react-native";
+import { Link } from "react-router-native";
 import Text from "./Text";
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    height: 40,
-    alignItems: "center",
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
     backgroundColor: "#24292e",
+  },
+  tab: {
+    marginRight: 15,
   },
 });
 
 const AppBarTab = ({ children }) => {
   return (
-    <View>
+    <View style={styles.tab}>
       <Text color="white">{children}</Text>
     </View>
   );
@@ -21,7 +26,12 @@ const AppBarTab = ({ children }) => {
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <AppBarTab>Repositories</AppBarTab>
+      <Link to="/">
+        <AppBarTab>Repositories</AppBarTab>
+      </Link>
+      <Link to="/signIn">
+        <AppBarTab>Sign In</AppBarTab>
+      </Link>
     </View>
   );
 };
