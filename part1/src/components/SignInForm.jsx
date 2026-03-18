@@ -70,7 +70,7 @@ const SignInForm = ({ onSubmit }) => {
           hasError("password") && styles.inputTextError,
         ]}
         placeholder="Password"
-        placeholderTextColor={theme.colors.textSecondary}
+        placeholderTextColor={[theme.colors.textSecondary, theme.fonts.main]}
         value={formik.values.password}
         onChangeText={formik.handleChange("password")}
         onBlur={formik.handleBlur("password")}
