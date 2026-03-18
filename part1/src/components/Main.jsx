@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import RepositoryList from "./RepositoryList";
 import AppBar from "./AppBar";
 import { Route, Routes, Navigate } from "react-router-native";
-import SignIn from "./SignIn";
+import SignInForm from "./SignInForm";
 import theme from "../theme";
 
 const styles = StyleSheet.create({
@@ -62,42 +62,17 @@ const repositories = [
     reviewCount: 0,
     ownerAvatarUrl: "https://avatars3.githubusercontent.com/u/13142323?v=4",
   },
-  {
-    id: "rails.rails",
-    fullName: "rails/rails",
-    description: "Ruby on Rails",
-    language: "Ruby",
-    forksCount: 18349,
-    stargazersCount: 45377,
-    ratingAverage: 100,
-    reviewCount: 2,
-    ownerAvatarUrl: "https://avatars1.githubusercontent.com/u/4223?v=4",
-  },
-  {
-    id: "django.django",
-    fullName: "django/django",
-    description: "The Web framework for perfectionists with deadlines.",
-    language: "Python",
-    forksCount: 21015,
-    stargazersCount: 48496,
-    ratingAverage: 73,
-    reviewCount: 5,
-    ownerAvatarUrl: "https://avatars2.githubusercontent.com/u/27804?v=4",
-  },
-  {
-    id: "reduxjs.redux",
-    fullName: "reduxjs/redux",
-    description: "Predictable state container for JavaScript apps",
-    language: "TypeScript",
-    forksCount: 13902,
-    stargazersCount: 52869,
-    ratingAverage: 0,
-    reviewCount: 0,
-    ownerAvatarUrl: "https://avatars3.githubusercontent.com/u/13142323?v=4",
-  },
 ];
 
 const Main = () => {
+  const SignUp = () => {
+    const onSubmit = (values) => {
+      if (values.username !== "" && values.password !== "") {
+        console.log(values);
+      }
+    };
+    return <SignInForm onSubmit={onSubmit} />;
+  };
   return (
     <View style={styles.mainWrapper}>
       <AppBar />
@@ -107,7 +82,7 @@ const Main = () => {
             path="/"
             element={<RepositoryList repositories={repositories} />}
           />
-          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signIn" element={<SignUp />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </View>

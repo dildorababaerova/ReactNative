@@ -16,3 +16,15 @@ C:\Users\Dildora\AppData\Local\Android\Sdk`
 `npx dev tools`
 
 https://reactnative.dev/docs/getting-started.html
+
+```js
+<Pressable
+  onPress={formik.handleSubmit}
+  style={[styles.button, !(formik.isValid && formik.dirty) && { opacity: 0.5 }]}
+  disabled={!(formik.isValid && formik.dirty)}
+>
+  <Text color="white" fontWeight="bold" fontSize="subheading">
+    Sign in
+  </Text>
+</Pressable>
+```
