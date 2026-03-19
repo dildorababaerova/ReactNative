@@ -16,6 +16,7 @@ C:\Users\Dildora\AppData\Local\Android\Sdk`
 `npx dev tools`
 
 https://reactnative.dev/docs/getting-started.html
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 
 ```js
 <Pressable
