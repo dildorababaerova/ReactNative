@@ -29,3 +29,27 @@ https://css-tricks.com/snippets/css/a-guide-to-flexbox/
   </Text>
 </Pressable>
 ```
+
+`npm install @apollo/client@3`
+`npm install @expo/metro-config@0.17.4`
+`npm install rxjs --legacy-peer-deps`
+✅ Исправление (очень важно)
+
+Добавь HttpLink:
+
+```js
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+
+const createApolloClient = () => {
+  return new ApolloClient({
+    link: new HttpLink({
+      uri: "http://192.168.100.38:4000/graphql",
+    }),
+    cache: new InMemoryCache(),
+  });
+};
+
+export default createApolloClient;
+```
+
+Перезапусти Expo с очисткой:`npx expo start -c`
