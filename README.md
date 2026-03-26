@@ -53,3 +53,19 @@ export default createApolloClient;
 ```
 
 Перезапусти Expo с очисткой:`npx expo start -c`
+
+`npx expo install expo-secure-store`
+
+GraphQL ВСЕГДА возвращает объект такой формы:
+
+{
+data: {
+login: {
+value: "TOKEN_HERE"
+}
+}
+}
+👉 Поэтому:
+data — это весь ответ
+data.login — результат mutation login
+data.login.value — сам токен
