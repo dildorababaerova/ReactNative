@@ -16,11 +16,7 @@ const SignIn = () => {
     }
   };
 
-  return (
-    <div>
-      <SignInForm onSubmit={onSubmit} />
-    </div>
-  );
+  return <SignInForm onSubmit={onSubmit} />;
 };
 
 export default SignIn;

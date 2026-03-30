@@ -15,11 +15,11 @@ export const useSignIn = () => {
       });
       const token = response.data?.authenticate.accessToken;
       await authStorage.setAccessToken(token);
-      await apolloClient.resetStore();
       console.log("TOKEN FROM BACKEND", token);
       if (!token) {
         throw new Error("Login failed: no token received");
       }
+      await apolloClient.resetStore();
       return { token };
     } catch (error) {
       return { error: error.message };
