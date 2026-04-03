@@ -111,4 +111,9 @@ export default defineConfig([
       "no-undef": "off", // Отключаем для .expo файлов, так как там используются метро-специфичные вещи
     },
   },
+  {
+    env: {
+      jest: true,
+    },
+  },
 ]);

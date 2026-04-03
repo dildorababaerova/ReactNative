@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image } from "react-native";
-import Text from "./Text";
+import Text from "../Text";
 
 const formatCount = (count) => {
   if (count >= 1000) return (count / 1000).toFixed(1) + "k";
@@ -15,44 +15,48 @@ const RepositoryItem = ({
   ratingAverage,
   reviewCount,
   image,
-}) => (
-  <View style={styles.container}>
-    <View style={styles.header}>
-      <Image style={styles.avatar} source={{ uri: image }}></Image>
-      <View style={styles.info}>
-        <Text fontSize="subheading" fontWeight="bold">
-          {fullName}
-        </Text>
-        <Text color="textSecondary" style={styles.description}>
-          {description}
-        </Text>
-        <View style={styles.languageContainer}>
-          <Text color="white" backgroundColor="backgroundPrimary">
-            {language}
+  testID,
+}) => {
+  console.log("RepositoryItem testID:", testID);
+  return (
+    <View style={styles.container} testID={testID}>
+      <View style={styles.header}>
+        <Image style={styles.avatar} source={{ uri: image }}></Image>
+        <View style={styles.info}>
+          <Text fontSize="subheading" fontWeight="bold">
+            {fullName}
           </Text>
+          <Text color="textSecondary" style={styles.description}>
+            {description}
+          </Text>
+          <View style={styles.languageContainer}>
+            <Text color="white" backgroundColor="backgroundPrimary">
+              {language}
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.stats}>
+        <View style={styles.statItem}>
+          <Text fontWeight="bold">{formatCount(stargazersCount)} </Text>
+          <Text color="textSecondary">Star </Text>
+        </View>
+        <View style={styles.statItem}>
+          <Text fontWeight="bold">{formatCount(forksCount)} </Text>
+          <Text color="textSecondary">Forks</Text>
+        </View>
+        <View style={styles.statItem}>
+          <Text fontWeight="bold">{formatCount(reviewCount)} </Text>
+          <Text color="textSecondary">Reviews</Text>
+        </View>
+        <View style={styles.statItem}>
+          <Text fontWeight="bold">{formatCount(ratingAverage)} </Text>
+          <Text color="textSecondary">Rating</Text>
         </View>
       </View>
     </View>
-    <View style={styles.stats}>
-      <View style={styles.statItem}>
-        <Text fontWeight="bold">{formatCount(stargazersCount)} </Text>
-        <Text color="textSecondary">Star </Text>
-      </View>
-      <View style={styles.statItem}>
-        <Text fontWeight="bold">{formatCount(forksCount)} </Text>
-        <Text color="textSecondary">Forks</Text>
-      </View>
-      <View style={styles.statItem}>
-        <Text fontWeight="bold">{formatCount(reviewCount)} </Text>
-        <Text color="textSecondary">Reviews</Text>
-      </View>
-      <View style={styles.statItem}>
-        <Text fontWeight="bold">{formatCount(ratingAverage)} </Text>
-        <Text color="textSecondary">Rating</Text>
-      </View>
-    </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

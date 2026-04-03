@@ -1,5 +1,5 @@
-import { useSignIn } from "../hooks/useSignIn";
-import SignInForm from "./SignInForm";
+import { useSignIn } from "../../hooks/useSignIn";
+import SignInForm from "../SignForm";
 import { useNavigate } from "react-router-native";
 
 const SignIn = () => {

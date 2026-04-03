@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList, Text } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import RepositoryItem from "./RepositoryItem";
+import RepositoryItem from "../src/components/RepositoryItem";
 import { useQuery } from "@apollo/client/react";
 
 import { GET_REPOSITORIES } from "../graphql/queries";

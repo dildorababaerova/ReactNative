@@ -1,9 +1,9 @@
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-native";
-import Text from "./Text";
-import useSignOut from "../hooks/useSignOut";
-import { ME } from "../graphql/queries";
+import Text from "../Text";
+import useSignOut from "../../hooks/useSignOut";
+import { ME } from "../../graphql/queries";
 
 const styles = StyleSheet.create({
   container: {
