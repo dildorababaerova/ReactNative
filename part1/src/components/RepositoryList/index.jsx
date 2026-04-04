@@ -1,7 +1,8 @@
-import { StyleSheet, View, FlatList, Text } from "react-native";
+import { StyleSheet, View, FlatList, Text, Pressable } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import RepositoryItem from "./RepositoryItem";
 import { useQuery } from "@apollo/client/react";
+import { useNavigate } from "react-router-native";
 
 import { GET_REPOSITORIES } from "../../graphql/queries";
 
@@ -17,23 +18,26 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
+  const navigate = useNavigate();
   const repositoryNodes = repositories ? repositories : [];
 
   return (
     <FlatList
       data={repositoryNodes}
       renderItem={({ item }) => (
-        <RepositoryItem
-          fullName={item.fullName}
-          description={item.description}
-          language={item.language}
-          forksCount={item.forksCount}
-          stargazersCount={item.stargazersCount}
-          ratingAverage={item.ratingAverage}
-          reviewCount={item.reviewCount}
-          image={item.ownerAvatarUrl}
-          testID="repositoryItem"
-        />
+        <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
+          <RepositoryItem
+            fullName={item.fullName}
+            description={item.description}
+            language={item.language}
+            forksCount={item.forksCount}
+            stargazersCount={item.stargazersCount}
+            ratingAverage={item.ratingAverage}
+            reviewCount={item.reviewCount}
+            image={item.ownerAvatarUrl}
+            testID="repositoryItem"
+          />
+        </Pressable>
       )}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={ItemSeparator}

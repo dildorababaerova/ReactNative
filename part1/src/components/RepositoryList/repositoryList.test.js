@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react-native";
 import { RepositoryListContainer } from ".";
+import { NativeRouter } from "react-router-native";
 
 describe("RepositoryList", () => {
   describe("RepositoryListContainer", () => {
@@ -48,8 +49,11 @@ describe("RepositoryList", () => {
       };
 
       const repositoryNodes = repositories.edges.map((edge) => edge.node);
-      render(<RepositoryListContainer repositories={repositoryNodes} />);
-
+      render(
+        <NativeRouter>
+          <RepositoryListContainer repositories={repositoryNodes} />
+        </NativeRouter>,
+      );
       const repositoryItems = screen.getAllByTestId("repositoryItem");
       expect(repositoryItems).toHaveLength(2);
       screen.debug();

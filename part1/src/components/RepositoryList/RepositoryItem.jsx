@@ -1,5 +1,9 @@
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Pressable } from "react-native";
 import Text from "../Text";
+
+import * as Linking from "expo-linking";
+import {} from "react-native";
+import theme from "../../theme";
 
 const formatCount = (count) => {
   if (count >= 1000) return (count / 1000).toFixed(1) + "k";
@@ -15,9 +19,15 @@ const RepositoryItem = ({
   ratingAverage,
   reviewCount,
   image,
+  url,
   testID,
+  showGitHubButton = false,
 }) => {
   console.log("RepositoryItem testID:", testID);
+  const handleGitHubButton = () => {
+    Linking.openURL(url);
+  };
+
   return (
     <View style={styles.container} testID={testID}>
       <View style={styles.header}>
@@ -39,7 +49,7 @@ const RepositoryItem = ({
       <View style={styles.stats}>
         <View style={styles.statItem}>
           <Text fontWeight="bold">{formatCount(stargazersCount)} </Text>
-          <Text color="textSecondary">Star </Text>
+          <Text color="textSecondary">Stars</Text>
         </View>
         <View style={styles.statItem}>
           <Text fontWeight="bold">{formatCount(forksCount)} </Text>
@@ -54,6 +64,18 @@ const RepositoryItem = ({
           <Text color="textSecondary">Rating</Text>
         </View>
       </View>
+      {showGitHubButton && (
+        <Pressable onPress={handleGitHubButton} style={styles.button}>
+          <Text
+            color="white"
+            fontWeight="bold"
+            fontSize="subheading"
+            backgroundColor="backgroundPrimary"
+          >
+            Open in GitHub
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -92,6 +114,14 @@ const styles = StyleSheet.create({
   },
   statItem: {
     alignItems: "center",
+  },
+  button: {
+    marginHorizontal: 20,
+    paddingVertical: 20,
+    marginTop: 20,
+    alignItems: "center",
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
   },
 });
 

@@ -2,14 +2,14 @@ import { View, StyleSheet, Text } from "react-native";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-native";
 import RepositoryItem from "./RepositoryItem";
-import { GET_REPOSITORY } from "../graphql/queries";
+import { GET_REPOSITORY } from "../../graphql/queries";
 
 export const SingleRepositoryView = () => {
   const { id } = useParams();
 
   const { data, error, loading } = useQuery(GET_REPOSITORY, {
     variables: { id },
-    fetchPolicy: "cache-and-network",
+    skip: !id,
   });
 
   if (loading) return <Text>loading...</Text>;
