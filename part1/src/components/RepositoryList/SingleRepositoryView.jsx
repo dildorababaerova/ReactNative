@@ -1,26 +1,21 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, FlatList } from "react-native";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-native";
 import RepositoryItem from "./RepositoryItem";
 import { GET_REPOSITORY } from "../../graphql/queries";
+import ReviewItemDetail from "./ReviewItemDetail";
 
-export const SingleRepositoryView = () => {
-  const { id } = useParams();
+const styles = StyleSheet.create({
+  separator: {
+    height: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    flex: 1,
+  },
+});
 
-  const { data, error, loading } = useQuery(GET_REPOSITORY, {
-    variables: { id },
-    skip: !id,
-  });
-
-  if (loading) return <Text>loading...</Text>;
-  if (error) return <Text>Error: {error.message}</Text>;
-
-  const repository = data?.repository;
-
-  if (!repository) {
-    return <Text>Repository not found</Text>;
-  }
-
+const RepositoryInfo = ({ repository }) => {
   return (
     <View>
       <RepositoryItem
@@ -36,6 +31,49 @@ export const SingleRepositoryView = () => {
         showGitHubButton={true}
       />
     </View>
+  );
+};
+
+const ReviewItem = ({ review }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <ReviewItemDetail
+      review={review}
+      expanded={expanded}
+      onPress={() => setExpanded(!expanded)}
+    />
+  );
+};
+
+const ItemSeparator = () => <View style={styles.separator} />;
+
+export const SingleRepositoryView = () => {
+  const { id } = useParams();
+
+  const { data, error, loading } = useQuery(GET_REPOSITORY, {
+    variables: { id },
+    skip: !id,
+  });
+
+  if (loading) return <Text>loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const repository = data?.repository;
+  const reviews = repository?.reviews?.edges?.map((edge) => edge.node) || [];
+
+  if (!repository) {
+    return <Text>Repository not found</Text>;
+  }
+
+  return (
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   );
 };
 

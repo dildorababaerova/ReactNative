@@ -34,6 +34,20 @@ export const GET_REPOSITORY = gql`
     repository(id: $id) {
       id
       fullName
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
       description
       language
       forksCount
