@@ -23,27 +23,12 @@ export const CREATE_REVIEW = gql`
     }
   }
 `;
-// export const CREATE_REVIEW = gql`
-//   mutation createReview(
-//     $ownerName: String!
-//     $repositoryName: String!
-//     $text: String
-//     $rating: Int!
-//   ) {
-//     createReview(
-//       review: {
-//         ownerName: $ownerName
-//         repositoryName: $repositoryName
-//         text: $text
-//         rating: $rating
-//       }
-//     ) {
-//       id
-//       repositoryId
-//       userId
-//       text
-//       rating
-//       createdAt
-//     }
-//   }
-// `;
+
+export const SIGN_UP = gql`
+  mutation createUser($user: CreateUserInput!) {
+    createUser(user: $user) {
+      id
+      username
+    }
+  }
+`;
