@@ -53,6 +53,7 @@ export const SingleRepositoryView = () => {
 
   const { data, error, loading } = useQuery(GET_REPOSITORY, {
     variables: { id },
+    fetchPolicy: "cache-and-network",
     skip: !id,
   });
 
@@ -63,7 +64,7 @@ export const SingleRepositoryView = () => {
   const reviews = repository?.reviews?.edges?.map((edge) => edge.node) || [];
 
   if (!repository) {
-    return <Text>Repository not found</Text>;
+    return <Text></Text>;
   }
 
   return (

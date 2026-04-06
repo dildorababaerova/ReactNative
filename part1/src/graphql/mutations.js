@@ -12,21 +12,10 @@ export const LOGIN = gql`
 `;
 
 export const CREATE_REVIEW = gql`
-  mutation createReview(
-    $ownerName: String!
-    $repositoryName: String!
-    $text: String
-    $rating: Int!
-  ) {
-    createReview(
-      review: {
-        ownerName: $ownerName
-        repositoryName: $repositoryName
-        text: $text
-        rating: $rating
-      }
-    ) {
+  mutation createReview($review: CreateReviewInput!) {
+    createReview(review: $review) {
       id
+      repositoryId
       userId
       text
       rating
@@ -34,3 +23,27 @@ export const CREATE_REVIEW = gql`
     }
   }
 `;
+// export const CREATE_REVIEW = gql`
+//   mutation createReview(
+//     $ownerName: String!
+//     $repositoryName: String!
+//     $text: String
+//     $rating: Int!
+//   ) {
+//     createReview(
+//       review: {
+//         ownerName: $ownerName
+//         repositoryName: $repositoryName
+//         text: $text
+//         rating: $rating
+//       }
+//     ) {
+//       id
+//       repositoryId
+//       userId
+//       text
+//       rating
+//       createdAt
+//     }
+//   }
+// `;

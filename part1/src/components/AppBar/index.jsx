@@ -47,6 +47,9 @@ const AppBar = () => {
         </Link>
         {username ? (
           <>
+            <Link to="/create-review">
+              <AppBarTab>Create review</AppBarTab>
+            </Link>
             <View>
               <Text color="white">{username} logged in </Text>
             </View>
