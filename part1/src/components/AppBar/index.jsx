@@ -50,6 +50,9 @@ const AppBar = () => {
             <Link to="/create-review">
               <AppBarTab>Create review</AppBarTab>
             </Link>
+            <Link to="/myReview">
+              <AppBarTab>My review</AppBarTab>
+            </Link>
             <View>
               <Text color="white">{username} logged in </Text>
             </View>

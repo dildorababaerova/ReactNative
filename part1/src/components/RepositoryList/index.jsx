@@ -1,11 +1,19 @@
-import { StyleSheet, View, FlatList, Text, Pressable } from "react-native";
-import { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  Pressable,
+  TextInput,
+} from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import RepositoryItem from "./RepositoryItem";
 import { useNavigate } from "react-router-native";
 import { useRepositories } from "../../hooks/useRepositories";
 import SortingSelector from "./SortingSelector";
-// import OrderSelector from "./OrderSelector";
+import { useDebounce } from "use-debounce";
+import { Searchbar } from "react-native-paper";
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,6 +21,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     flex: 1,
+  },
+  search: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+    backgroundColor: "white",
+  },
+  item: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderColor: "#eee",
   },
 });
 
@@ -32,47 +53,67 @@ const getOrderParams = (sortKey) => {
   }
 };
 
-export const RepositoryListContainer = ({
-  repositories,
-  sortKey,
-  setSortKey,
-}) => {
-  const navigate = useNavigate();
-  const repositoryNodes = repositories ? repositories : [];
-
-  return (
-    <FlatList
-      data={repositoryNodes}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
-          <RepositoryItem
-            fullName={item.fullName}
-            description={item.description}
-            language={item.language}
-            forksCount={item.forksCount}
-            stargazersCount={item.stargazersCount}
-            ratingAverage={item.ratingAverage}
-            reviewCount={item.reviewCount}
-            image={item.ownerAvatarUrl}
-            testID="repositoryItem"
-          />
-        </Pressable>
-      )}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    const { searchKeyword, setSearchKeyword, sortKey, setSortKey } = this.props;
+    return (
+      <View>
+        <Searchbar
+          placeholder="Search repositories..."
+          value={searchKeyword}
+          onChangeText={setSearchKeyword}
+          style={styles.search}
+        />
         <SortingSelector selectedValue={sortKey} onValueChange={setSortKey} />
-      }
-      ItemSeparatorComponent={ItemSeparator}
-    />
-  );
-};
+      </View>
+    );
+  };
+
+  renderItem = ({ item }) => {
+    const { navigate } = this.props;
+    return (
+      <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
+        <RepositoryItem
+          fullName={item.fullName}
+          description={item.description}
+          language={item.language}
+          forksCount={item.forksCount}
+          stargazersCount={item.stargazersCount}
+          ratingAverage={item.ratingAverage}
+          reviewCount={item.reviewCount}
+          image={item.ownerAvatarUrl}
+          testID="repositoryItem"
+        />
+      </Pressable>
+    );
+  };
+
+  render() {
+    const { repositories } = this.props;
+    const repositoryNodes = repositories ? repositories : [];
+
+    return (
+      <FlatList
+        data={repositoryNodes}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={this.renderHeader}
+        renderItem={this.renderItem}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    );
+  }
+}
 const RepositoryList = () => {
   const [sortKey, setSortKey] = useState("LATEST");
   const { orderBy, orderDirection } = getOrderParams(sortKey);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [debouncedKeyword] = useDebounce(searchKeyword, 500);
+  const navigate = useNavigate();
 
   const { repositories, loading, error } = useRepositories({
     orderBy,
     orderDirection,
+    searchKeyword: debouncedKeyword,
   });
 
   if (loading) return <Text>Loading...</Text>;
@@ -87,6 +128,9 @@ const RepositoryList = () => {
           repositories={repositories}
           sortKey={sortKey}
           setSortKey={setSortKey}
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          navigate={navigate}
         />
       </SafeAreaView>
     </SafeAreaProvider>

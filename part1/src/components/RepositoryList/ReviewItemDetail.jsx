@@ -2,8 +2,16 @@ import { View, StyleSheet, Pressable } from "react-native";
 import Text from "../Text";
 import { format } from "date-fns";
 
-const ReviewItemDetail = ({ review, onPress, expanded }) => {
+const ReviewItemDetail = ({
+  review,
+  onPress,
+  expanded,
+  showRepositoryName = false,
+}) => {
   const formattedDate = format(new Date(review.createdAt), "dd.MM.yyyy");
+  const headerText = showRepositoryName
+    ? review.repository.fullName
+    : review.user?.username;
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
@@ -13,7 +21,7 @@ const ReviewItemDetail = ({ review, onPress, expanded }) => {
           </View>
           <View style={styles.info}>
             <Text fontSize="subheading" fontWeight="bold">
-              {review.user.username}
+              {headerText}
             </Text>
             <Text color="textSecondary" style={styles.description}>
               {formattedDate}

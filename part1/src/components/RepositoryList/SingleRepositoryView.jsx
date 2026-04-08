@@ -34,7 +34,7 @@ const RepositoryInfo = ({ repository }) => {
   );
 };
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -42,13 +42,14 @@ const ReviewItem = ({ review }) => {
       review={review}
       expanded={expanded}
       onPress={() => setExpanded(!expanded)}
+      showRepositoryName={true}
     />
   );
 };
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const SingleRepositoryView = () => {
+const SingleRepositoryView = () => {
   const { id } = useParams();
 
   const { data, error, loading } = useQuery(GET_REPOSITORY, {
