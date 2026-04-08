@@ -1,7 +1,10 @@
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { useQuery } from "@apollo/client";
 import { ReviewItem } from "../RepositoryList/SingleRepositoryView";
 import { ME } from "../../graphql/queries";
+import Text from "../Text";
+import ReviewActions from "./ReviewActions";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   separator: {
@@ -10,12 +13,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flex: 1,
   },
+  button: {
+    marginHorizontal: 20,
+    paddingVertical: 20,
+    marginTop: 20,
+    alignItems: "center",
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const MyReview = () => {
-  const { data, error, loading } = useQuery(ME, {
+  const { data, error, loading, refetch } = useQuery(ME, {
     variables: { includeReviews: true },
     fetchPolicy: "cache-and-network",
   });
@@ -32,11 +43,21 @@ export const MyReview = () => {
       </View>
     );
   }
+  const renderItem = ({ item }) => (
+    <View>
+      <ReviewItem review={item} showRepositoryName={true} />
+      <ReviewActions
+        reviewId={item.id}
+        repositoryId={item.repository.id}
+        refetch={refetch}
+      />
+    </View>
+  );
 
   return (
     <FlatList
       data={reviews}
-      renderItem={({ item }) => <ReviewItem review={item} />}
+      renderItem={renderItem}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
     />

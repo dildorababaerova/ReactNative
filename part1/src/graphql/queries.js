@@ -78,6 +78,10 @@ export const ME = gql`
               id
               fullName
             }
+            user {
+              id
+              username
+            }
           }
         }
       }
