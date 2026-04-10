@@ -1,12 +1,43 @@
 import { gql } from "@apollo/client";
 
+// export const GET_REPOSITORIES = gql`
+//   query Repositories(
+//     $orderBy: AllRepositoriesOrderBy
+//     $orderDirection: OrderDirection
+//     $searchKeyword: String
+//   ) {
+//     repositories(
+//       orderBy: $orderBy
+//       orderDirection: $orderDirection
+//       searchKeyword: $searchKeyword
+//     ) {
+//       edges {
+//         node {
+//           id
+//           fullName
+//           description
+//           language
+//           forksCount
+//           stargazersCount
+//           ratingAverage
+//           reviewCount
+//           ownerAvatarUrl
+//         }
+//       }
+//     }
+//   }
+// `;
 export const GET_REPOSITORIES = gql`
   query Repositories(
+    $first: Int
+    $after: String
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
     $searchKeyword: String
   ) {
     repositories(
+      first: $first
+      after: $after
       orderBy: $orderBy
       orderDirection: $orderDirection
       searchKeyword: $searchKeyword
@@ -23,44 +54,15 @@ export const GET_REPOSITORIES = gql`
           reviewCount
           ownerAvatarUrl
         }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
 `;
-// export const GET_REPOSITORIES = gql`
-//   query Repositories(
-//     $first: Int
-//     $after: String
-//     $orderBy: AllRepositoriesOrderBy
-//     $orderDirection: OrderDirection
-//   ) {
-//     repositories(
-//       first: $first
-//       after: $after
-//       orderBy: $orderBy
-//       orderDirection: $orderDirection
-//     ) {
-//       edges {
-//         node {
-//           id
-//           fullName
-//           description
-//           language
-//           forksCount
-//           stargazersCount
-//           ratingAverage
-//           reviewCount
-//           ownerAvatarUrl
-//         }
-//         cursor
-//       }
-//       pageInfo {
-//         hasNextPage
-//         endCursor
-//       }
-//     }
-//   }
-// `;
 
 export const ME = gql`
   query Me($includeReviews: Boolean = false) {
@@ -90,11 +92,12 @@ export const ME = gql`
 `;
 
 export const GET_REPOSITORY = gql`
-  query GetRepository($id: ID!) {
+  query GetRepository($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       id
       fullName
-      reviews {
+      reviews(first: $first, after: $after) {
+        totalCount
         edges {
           node {
             id
@@ -110,6 +113,12 @@ export const GET_REPOSITORY = gql`
               username
             }
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
       description

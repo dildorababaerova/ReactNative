@@ -89,7 +89,7 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { repositories } = this.props;
+    const { repositories, onEndReach } = this.props;
     const repositoryNodes = repositories ? repositories : [];
 
     return (
@@ -99,6 +99,8 @@ export class RepositoryListContainer extends React.Component {
         ListHeaderComponent={this.renderHeader}
         renderItem={this.renderItem}
         ItemSeparatorComponent={ItemSeparator}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -110,7 +112,8 @@ const RepositoryList = () => {
   const [debouncedKeyword] = useDebounce(searchKeyword, 500);
   const navigate = useNavigate();
 
-  const { repositories, loading, error } = useRepositories({
+  const { repositories, loading, fetchMore, error } = useRepositories({
+    first: 8,
     orderBy,
     orderDirection,
     searchKeyword: debouncedKeyword,
@@ -120,6 +123,11 @@ const RepositoryList = () => {
   if (error) return <Text>Error: {error.message}</Text>;
 
   console.log("RepositoriesLIST", repositories);
+
+  const onEndReach = () => {
+    // Подгружаем следующую страницу
+    fetchMore();
+  };
 
   return (
     <SafeAreaProvider>
@@ -131,6 +139,7 @@ const RepositoryList = () => {
           searchKeyword={searchKeyword}
           setSearchKeyword={setSearchKeyword}
           navigate={navigate}
+          onEndReach={onEndReach}
         />
       </SafeAreaView>
     </SafeAreaProvider>

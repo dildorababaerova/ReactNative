@@ -2,49 +2,30 @@ import { useQuery } from "@apollo/client";
 import { GET_REPOSITORIES } from "../graphql/queries";
 
 export const useRepositories = (variables) => {
-  const { data, loading, error } = useQuery(GET_REPOSITORIES, {
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
     variables,
     fetchPolicy: "cache-and-network",
   });
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+    if (!canFetchMore) return;
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...variables,
+      },
+    });
+  };
 
   const repositories = data?.repositories.edges.map((edge) => edge.node) || [];
 
   return {
     repositories,
+    fetchMore: handleFetchMore,
     loading,
-    error,
+    ...result,
   };
 };
-
-// DEEPSEEK option
-// import { useQuery } from "@apollo/client";
-// import { GET_REPOSITORIES } from "../graphql/queries";
-
-// export const useRepositories = (variables) => {
-//   const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
-//     variables,
-//     fetchPolicy: "cache-and-network",
-//   });
-//   const handleFetchMore = () => {
-//     const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
-//     if (!canFetchMore) return;
-//     fetchMore({
-//       variables: {
-//         after: data.repositories.pageInfo.endCursor,
-//         ...variables,
-//       },
-//     });
-//   };
-
-//   const repositories = data?.repositories.edges.map((edge) => edge.node) || [];
-
-//   return {
-//     repositories,
-//     fetchMore: handleFetchMore,
-//     loading,
-//     ...result,
-//   };
-// };
 
 // import { useState, useEffect } from "react";
 

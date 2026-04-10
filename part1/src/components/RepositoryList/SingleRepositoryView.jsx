@@ -5,13 +5,13 @@ import { useParams } from "react-router-native";
 import RepositoryItem from "./RepositoryItem";
 import { GET_REPOSITORY } from "../../graphql/queries";
 import ReviewItemDetail from "./ReviewItemDetail";
+import { useRepositoryReviews } from "../../hooks/useRepositoryReviews";
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    flex: 1,
   },
 });
 
@@ -52,22 +52,21 @@ const ItemSeparator = () => <View style={styles.separator} />;
 const SingleRepositoryView = () => {
   const { id } = useParams();
 
-  const { data, error, loading } = useQuery(GET_REPOSITORY, {
-    variables: { id },
-    fetchPolicy: "cache-and-network",
-    skip: !id,
-  });
+  const { repository, reviews, fetchMoreReviews, loading, error } =
+    useRepositoryReviews(id);
 
-  if (loading) return <Text>loading...</Text>;
+  if (loading && !repository) return <Text>loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
-  const repository = data?.repository;
-  const reviews = repository?.reviews?.edges?.map((edge) => edge.node) || [];
-
   if (!repository) {
-    return <Text></Text>;
+    return <Text>Repository not found</Text>;
   }
 
+  const handleEndReached = () => {
+    if (!loading) {
+      fetchMoreReviews();
+    }
+  };
   return (
     <FlatList
       data={reviews}
@@ -75,6 +74,11 @@ const SingleRepositoryView = () => {
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        loading ? <Text>Loading more reviews...</Text> : null
+      }
     />
   );
 };
